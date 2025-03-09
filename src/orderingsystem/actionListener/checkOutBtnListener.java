@@ -41,6 +41,14 @@ public class checkOutBtnListener implements ActionListener {
     
     @Override
     public void actionPerformed(ActionEvent e) {
+        if (orderPanel.orderArea.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(menuPanel, 
+                    "No order has been placed yet.", 
+                    "Empty Order", 
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
          String receipt = "===========================================  RECEIPT ====================================================================================\n" +
                          "Table Number: " + orderPanel.tableNumber + "\n" +
                          "-----------------------------------------------------------------------------------------------------------------------------------------\n" +
@@ -74,7 +82,7 @@ public class checkOutBtnListener implements ActionListener {
                 options2[0]);
         
         if (response == JOptionPane.YES_OPTION) {
-            String filename = "src/Assets/data/sales.txt";
+            String filepath = "src/Assets/data/sales.txt";
             
             LocalDateTime now = LocalDateTime.now();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -84,7 +92,7 @@ public class checkOutBtnListener implements ActionListener {
             String logEntry = timestamp + " | Table Number: " + orderPanel.tableNumber +
                               " | Order: " + orderText +
                               " | Total: ₱" + String.format("%.2f", orderPanel.total) + "\n";
-            try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename, true))) {
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(filepath, true))) {
                 writer.write(logEntry);
             } catch (IOException ex) {
                 ex.printStackTrace();
