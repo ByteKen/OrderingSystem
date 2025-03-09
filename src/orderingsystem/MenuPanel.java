@@ -98,7 +98,7 @@ public class MenuPanel extends JPanel{
         return panel;
     }
     
-    public void setSelectedButton(JButton button) {
+      public void setSelectedButton(JButton button) {
         // Optionally, unhighlight the previously selected button.
         if (selectedButton != null) {
             // Remove the highlight (or reset the border).
@@ -115,8 +115,7 @@ public class MenuPanel extends JPanel{
             selectedButton.setBorder(BorderFactory.createTitledBorder("Selected"));
         }
     }
-    
-    // Getter for the selected button.
+   
     public JButton getSelectedButton() {
         return selectedButton;
     }
@@ -147,7 +146,7 @@ public class MenuPanel extends JPanel{
         menuItemPrices.put("Garlic & Cheese Classic", 140.00);
         menuItemPrices.put("Choco Tiramisu Frozen Cake", 62.00);
         menuItemPrices.put("Creamy Caramel Frozen Cake", 62.00);
-         menuItemPrices.put("Classic Choco Frozen Cake", 62.00);
+        menuItemPrices.put("Classic Choco Frozen Cake", 62.00);
         
         setLayout(new BorderLayout());
         add(createMenu(), BorderLayout.CENTER);
