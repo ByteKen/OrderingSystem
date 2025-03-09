@@ -7,6 +7,7 @@ package orderingsystem.actionListener;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.JOptionPane;
 import orderingsystem.MenuPanel;
 import orderingsystem.OrderPanel;
 
@@ -15,15 +16,25 @@ import orderingsystem.OrderPanel;
  * @author escob
  */
 public class clearBtnListener implements ActionListener{
+    private MenuPanel menuPanel;
     private OrderPanel orderPanel;
     
-    public clearBtnListener(OrderPanel orderPanel) {
+    public clearBtnListener(MenuPanel menuPanel, OrderPanel orderPanel) {
+        this.menuPanel = menuPanel;
         this.orderPanel = orderPanel;
     }
     
     @Override
     public void actionPerformed(ActionEvent e) {
-        orderPanel.resetOrder(true);
+        int response = JOptionPane.showConfirmDialog(
+             menuPanel,
+            "Do you want to clear the entire transaction?",
+            "Confirmation",
+            JOptionPane.YES_NO_OPTION
+        );
+        if (response == JOptionPane.YES_OPTION) {
+            orderPanel.resetOrder(true);
+        }
     }
     
 }
