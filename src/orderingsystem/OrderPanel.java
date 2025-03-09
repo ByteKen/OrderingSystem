@@ -29,11 +29,6 @@ public class OrderPanel extends JPanel{
     public int tableNumber;
     public double total = 0.0;
     
-    public void assignTableNumber() {
-         Random random = new Random();
-         tableNumber = random.nextInt(20) + 1;
-    }
-    
     private JPanel createOrderPanel() {
         TitledBorder titledBorder = BorderFactory.createTitledBorder("Order");
         titledBorder.setTitleColor(Color.WHITE);
@@ -64,57 +59,62 @@ public class OrderPanel extends JPanel{
         return panel;
     }
     
+    public void assignTableNumber() {
+         Random random = new Random();
+         tableNumber = random.nextInt(20) + 1;
+    }
+    
     public void appendToOrderArea(String text) {
         orderArea.append(text);
     }
     
-    public void removeOneItemFromOrderArea(String itemName) {
+     public void updateTotal() {
+        totalLabel.setText("Total: ₱" + String.format("%.2f", total));
+    }
+     
+     public void removeOneItemFromOrderArea(String itemName) {
         String currentText = orderArea.getText();
         String[] lines = currentText.split("\n");
         boolean updated = false;
         StringBuilder newText = new StringBuilder();
 
-    // Loop through each line of the order area text
+        // Loop through each line of the order area text
         for (String line : lines) {
-        // Look for the line that starts with the given item name and hasn't been updated yet.
-        if (!updated && line.trim().startsWith(itemName)) {
-            // Expect the line format: "ItemName x<quantity> - ₱<totalPrice>"
-            // Find the position of "x" and " -"
-            int xIndex = line.indexOf("x");
-            int dashIndex = line.indexOf(" -", xIndex);
-            if (xIndex != -1 && dashIndex != -1) {
-                String qtyString = line.substring(xIndex + 1, dashIndex).trim();
-                try {
-                    int qty = Integer.parseInt(qtyString);
-                    int newQty = qty - 1;  // decrement the quantity by 1
-                    // Only update if newQty is >= 0. If newQty is 0, we remove the line.
-                    if (newQty > 0) {
-                        // Get the unit price from menuPanel for this item.
-                        double price = 0.0;
-                        if (menuPanel.getMenuItemPrices().containsKey(itemName)) {
-                            price = menuPanel.getMenuItemPrices().get(itemName);
+            // Look for the line that starts with the given item name
+            if (!updated && line.trim().startsWith(itemName)) {
+                // Expect the line format: "ItemName x<quantity> - ₱<totalPrice>"
+                // Find the position of "x" and " -"
+                int xIndex = line.indexOf("x");
+                int dashIndex = line.indexOf(" -", xIndex);
+                if (xIndex != -1 && dashIndex != -1) {
+                    String qtyString = line.substring(xIndex + 1, dashIndex).trim();
+                    try {
+                        int qty = Integer.parseInt(qtyString);
+                        int newQty = qty - 1;  // decrement the quantity by 1
+                        // Only update if newQty is >= 0. If newQty is 0, we remove the line.
+                        if (newQty > 0) {
+                            // Get the unit price from menuPanel for this item.
+                            double price = 0.0;
+                            if (menuPanel.getMenuItemPrices().containsKey(itemName)) {
+                                price = menuPanel.getMenuItemPrices().get(itemName);
+                            }
+                            // Create an updated line with the new quantity and new total for that item.
+                            String updatedLine = itemName + " x" + newQty + " - ₱" + String.format("%.2f", price * newQty);
+                            newText.append(updatedLine).append("\n");
                         }
-                        // Create an updated line with the new quantity and new total for that item.
-                        String updatedLine = itemName + " x" + newQty + " - ₱" + String.format("%.2f", price * newQty);
-                        newText.append(updatedLine).append("\n");
+                        // Mark as updated so we don't process any further lines matching this item.
+                        updated = true;
+                        continue;
+                    } catch (NumberFormatException ex) {
+                        // If parsing fails, we simply append the original line.
                     }
-                    // Mark as updated so we don't process any further lines matching this item.
-                    updated = true;
-                    continue;
-                } catch (NumberFormatException ex) {
-                    // If parsing fails, we simply append the original line.
                 }
             }
+            // For all other lines or if this line is not updated, add it unchanged.
+            newText.append(line).append("\n");
         }
-        // For all other lines or if this line is not updated, add it unchanged.
-        newText.append(line).append("\n");
-    }
-    // Set the modified text back to the orderArea.
-    orderArea.setText(newText.toString());
-}
-    
-     public void updateTotal() {
-        totalLabel.setText("Total: ₱" + String.format("%.2f", total));
+        // Set the modified text back to the orderArea.
+        orderArea.setText(newText.toString());
     }
      
      public void resetOrder(boolean newTable) {
@@ -135,6 +135,5 @@ public class OrderPanel extends JPanel{
         assignTableNumber();
         
         add(createOrderPanel(), BorderLayout.CENTER);
-
     }
 }
