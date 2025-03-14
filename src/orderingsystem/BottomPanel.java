@@ -57,7 +57,7 @@ public class BottomPanel extends JPanel{
         addBtn.addActionListener(new addBtnListener(menuPanel, orderPanel));
         removeBtn.addActionListener(new removeBtnListener(menuPanel, orderPanel));
         checkOutBtn.addActionListener(new checkOutBtnListener(menuPanel, orderPanel));
-        clearBtn.addActionListener(new clearBtnListener(orderPanel));
+        clearBtn.addActionListener(new clearBtnListener(menuPanel, orderPanel));
         
         panel.add(addBtn);
         panel.add(removeBtn);
