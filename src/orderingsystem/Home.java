@@ -35,7 +35,7 @@ public class Home extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
         setLocationRelativeTo(null);
-        setResizable(false);
+        setResizable(true);
         
         createComponents();
         
